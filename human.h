@@ -6,6 +6,7 @@
 #include<vector>
 #include<windows.h>
 #include"humanData.h"
+#include<map>
 
 using namespace std;
 
@@ -35,6 +36,21 @@ bool readHumans(const char* filename, vector<Human>& humans) {
 		humans.push_back(human);
 		in >> human;
 	}
+	in.close();
+	return true;
+}
+bool readHumans(const char* filename, map<string, HumanData>& humans) {
+	ifstream in(filename);
+	if (!in.is_open())
+		return false;
+	string name;
+	HumanData data;
+	getline(in, name) >> data;
+	while (!in.fail()) {
+		humans[name] = data;
+		getline(in, name) >> data;
+	}
+	in.close();
 	return true;
 }
 class FindException {};
@@ -46,6 +62,30 @@ Human findByName(const vector<Human>& humans, const string& name) {
 			return (*it);
 	}
 	throw FindException();
+}
+Human findByNameBin(const vector<Human>& humans, const string& name, int min, int max) {
+	int index = (min + max) / 2;
+	if (min > max)
+		throw FindException();
+	else if (humans[index].name == name)
+		return humans[index];
+	else if (humans[index].name > name)
+		return findByNameBin(humans, name, min, index - 1);
+	else if (humans[index].name < name)
+		return findByNameBin(humans, name, index + 1, max);
+}
+Human findByNameBin(const vector<Human>& humans, const string& name) {
+	cout << "Ведется поиск: " << name << endl;
+	return findByNameBin(humans, name, 0, (int)humans.size() - 1);
+}
+void findByNameMap(map<string, HumanData>& humans, string name) {
+	map<string, HumanData>::const_iterator it = humans.find(name);
+	if (it != humans.end()) {
+		cout << "Человек найден" << endl;
+		cout << it->first << ' ' << it->second << endl;
+	}
+	else
+		cout << "Человек не найден: " << name << endl;
 }
 string convert(string str) {
 	char* buf = new char[strlen(str.c_str()) + 1];
