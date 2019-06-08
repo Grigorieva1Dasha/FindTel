@@ -10,14 +10,25 @@ using namespace std;
 int main(void) {
 	setlocale(LC_ALL, "Russian");
 	SortableVector<Human> vec;
+	map<string, HumanData> map;
 	if (readHumans("in.txt", vec) == 0) {
-		cout << "Не получается окрыть входной файл";
+		cout << "Не получается окрыть входной файл" << endl;
+		return -1;
+	}
+	if (readHumans("in.txt", map) == 0) {
+		cout << "Не получается окрыть входной файл" << endl;
+		return -1;
 	}
 	string namefind, converted;
 	cout << "Введите фамилию для поиска:" << endl;
 	cin >> namefind;
+	cout << endl;
 	converted = convert(namefind);
-	cout << findByName(vec, converted) << endl;
+
+	cout << "Прямой поиск: " << findByName(vec, converted) << endl << endl;
+	cout << "Бинарный поиск: " << findByNameBin(vec, converted) << endl << endl;
+	cout << "Поиск мапом: ";
+	findByNameMap(map, converted);
 	system("pause");
 	return 0;
 }
