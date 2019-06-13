@@ -20,17 +20,18 @@ int main(void) {
 		return -1;
 	}
 	string namefind, converted;
-	cout << "Введите фамилию для поиска:" << endl;
-	cin >> namefind;
-	cout << endl;
-	converted = convert(namefind);
-
-	cout << "Прямой поиск: " << findByName(vec, converted) << endl << endl;
-	cout << "Бинарный поиск: " << findByNameBin(vec, converted) << endl << endl;
-	cout << "Поиск мапом: ";
-	findByNameMap(map, converted);
+	while (true){
+		cout << "Введите фамилию для поиска / Для выхода введите слово выход" << endl;
+		cin >> namefind;
+		cout << endl;
+		converted = convert(namefind);
+		if (converted == "выход")
+			break;
+		cout << "Прямой поиск: " << findByName(vec, converted) << endl << endl;
+		cout << "Бинарный поиск: " << findByNameBin(vec, converted) << endl << endl;
+		cout << "Поиск мапом: ";
+		findByNameMap(map, converted);
+	}
 	system("pause");
 	return 0;
 }
-
-
